@@ -1,18 +1,69 @@
 aid: purplelab
 name: PurpleLab
-description: 'PurpleLab is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  PurpleLab is a healthcare data and analytics company headquartered in Wayne, Pennsylvania, whose
+  HealthNexus platform gives life sciences, advertising agencies, financial services, payers and
+  providers no-code access to real-world data and real-world evidence. HealthNexus aggregates
+  billions of medical and pharmacy claims alongside provider, eligibility, remittance, EHR and
+  mortality data into the CLEAR RWD dataset, which PurpleLab states is certified to HIPAA
+  de-identification standards under the Expert Determination method. Alongside the no-code platform
+  the company has marketed HealthNexus API Streams — subscription pre-built data feeds and scoring
+  APIs covering provider profiles, locations, credentials, affiliations, performance and efficiency
+  scores, payer influence and patient risk adjustment. PurpleLab has raised roughly $68M including a
+  $40M Series B led by Primus Capital with Edison Partners, and acquired KAID Health in 2025. No
+  public developer portal, API reference, or machine-readable contract is published; the API and
+  platform surfaces sit behind HealthNexus SSO.
+image: https://purplelab.com/hubfs/PurpleLab-website/web-app-manifest-512x512.png
 url: https://raw.githubusercontent.com/api-evangelist/purplelab/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-26'
 modified: '2026-08-26'
 tags:
+- Healthcare
+- Health Data
+- Real-World Data
+- Real-World Evidence
+- Medical Claims
+- Pharmacy Claims
+- Provider Data
+- Healthcare Analytics
+- Life Sciences
+- Data Products
+- HIPAA
 - Company
-apis: []
+apis:
+- name: HealthNexus API Streams
+  description: >-
+    Subscription-based, pre-built healthcare data feeds and scoring APIs that augment a client's
+    internal datasets with PurpleLab's proprietary claims scoring, forecasting, ranking and
+    segmentation. PurpleLab has marketed streams covering Provider Profiles, Provider Locations,
+    Provider Migrations, Provider Credentials, Provider Qualifications, Provider Experience,
+    Provider Practice Characteristics, Provider Affiliations, Industry Influence, Payer Influence,
+    Provider Performance Scores, Provider Efficiency, Patient Risk Adjustment Factor and Patient
+    SDOH. Access is commercial and gated; PurpleLab publishes no public reference, OpenAPI, or
+    authentication documentation for it.
+  humanURL: https://purplelab.com/platform
+  baseURL: https://api.purplelab.com
+  x-baseurl-provenance: >-
+    PROBED, not documented. PurpleLab publishes no API reference stating a base URL.
+    https://api.purplelab.com/ returned HTTP 200 application/json on 2026-08-26 and answers unknown
+    paths with structured JSON 404 bodies, so it is a live first-party JSON API host on the
+    company's own domain. A second first-party API host, https://api.healthnexus.io (AWS API
+    Gateway, HTTP 403 {"message":"Forbidden"} on every anonymous path), backs the HealthNexus
+    platform - https://portal.purplelab.com/ 307-redirects to
+    https://api.healthnexus.io/healthnexussso/checklogin. Which host serves the Streams product is
+    not stated publicly.
+  tags:
+  - Healthcare
+  - Real-World Data
+  - Provider Data
+  - Medical Claims
+  - Data Feeds
+  properties:
+  - type: Login
+    url: https://healthnexus-sso.purplelab.com/login?domain=portal.purplelab.com
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -20,4 +71,72 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
-  url: https://www.nasdaqprivatemarket.com/
+  url: https://purplelab.com/
+- type: Platform
+  url: https://purplelab.com/platform
+- type: About
+  url: https://purplelab.com/company
+- type: Support
+  url: https://purplelab.com/contact-us
+- type: Blog
+  url: https://purplelab.com/resources
+- type: BlogRSS
+  url: https://purplelab.com/resources/rss.xml
+- type: Glossary
+  url: https://purplelab.com/glossary
+- type: Careers
+  url: https://purplelab.com/careers
+- type: Login
+  url: https://healthnexus-sso.purplelab.com/login?domain=portal.purplelab.com
+- type: TermsOfService
+  url: https://purplelab.com/terms-and-conditions-2026-01-29
+- type: PrivacyPolicy
+  url: https://purplelab.com/privacy
+- type: ProductPrivacyPolicy
+  url: https://purplelab.com/product-privacy-policy
+- type: LinkedIn
+  url: https://www.linkedin.com/company/purplelab-inc/
+- type: Twitter
+  url: https://twitter.com/purplelabinc
+- type: Conformance
+  url: conformance/purplelab-conformance.yml
+- type: Compliance
+  url: conformance/purplelab-conformance.yml
+- type: DomainSecurity
+  url: security/purplelab-domain-security.yml
+- type: Packages
+  url: packages/purplelab-packages.yml
+- type: Plans
+  url: plans/purplelab-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/purplelab-rate-limits.yml
+- type: Lifecycle
+  url: lifecycle/purplelab-lifecycle.yml
+- type: LLMsTxt
+  url: llms/purplelab-llms.txt
+x-enrichment:
+  date: '2026-08-26'
+  status: minimal
+  artifacts_added: 10
+  pass: local-v1
+x-coverage:
+  state: gated
+  reason: sales-gate
+  detail: >-
+    PurpleLab markets "HealthNexus API Streams" but has retired its product page
+    (purplelab.com/api-streams/ now 404s), publishes no developer portal or reference anywhere in
+    its 238-URL sitemap, and routes every access request through a contact-us form - while the live
+    platform API gateway at api.healthnexus.io answers every anonymous request, including all spec
+    and .well-known paths, with 403 {"message":"Forbidden"}.
+  evidence:
+  - url: https://purplelab.com/api-streams/
+    status: 404
+  - url: https://api.healthnexus.io/openapi.json
+    status: 403
+  - url: https://api.purplelab.com/openapi.json
+    status: 404
+  - url: https://purplelab.com/sitemap.xml
+    status: 200
+  - url: https://portal.purplelab.com/
+    status: 307
+  checked: '2026-08-26'

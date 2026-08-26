@@ -1,0 +1,52 @@
+generated: '2026-08-26'
+method: searched
+source: >-
+  https://purplelab.com/sitemap.xml (HTTP 200, 238 URLs reviewed), https://purplelab.com/ (HTTP 200),
+  https://purplelab.com/platform (HTTP 200), https://purplelab.com/contact-us (HTTP 200),
+  2026-08-26.
+note: >-
+  NO PUBLISHED PRICING. PurpleLab operates an enterprise "contact us / request a demo" motion with
+  no public pricing page, no plan tiers, no quota or overage schedule, and no self-service sign-up.
+  Its sitemap contains no /pricing, /plans, or /packages URL, and the only conversion paths on the
+  site are the contact form and a demo request. plan_count is 0 by measurement, not by omission.
+  NO `Pricing` pointer is emitted in apis.yml, because there is no pricing page to point at.
+
+plans: []
+plan_count: 0
+
+model:
+  commercial_model: enterprise-contract
+  self_service: false
+  free_tier: false
+  trial: false
+  public_price_list: false
+  currency: null
+  billing_periods: []
+  sales_gate:
+    type: contact-form-and-demo-request
+    url: https://purplelab.com/contact-us
+    http_status: 200
+  evidence:
+  - url: https://purplelab.com/sitemap.xml
+    http_status: 200
+    finding: >-
+      No pricing, plans, or packages URL among the 238 canonical URLs the site publishes.
+  - url: https://purplelab.com/contact-us
+    http_status: 200
+    finding: >-
+      Contact form is the only route to commercial terms; the page directs existing customers to
+      success@purplelab.com for support.
+
+product_packaging_observed:
+  note: >-
+    PurpleLab does describe HOW it packages access, without attaching prices. Recorded here because
+    it is the only pricing-adjacent structure the company publishes, and it is descriptive, not a
+    quoted tier.
+  access_modes:
+  - no-code analytics in the HealthNexus platform
+  - parameterized queries
+  - custom data extracts
+  - direct data delivery into the customer's own environment
+  - subscription-based pre-built API data feeds (HealthNexus API Streams)
+  source: https://purplelab.com/platform
+  http_status: 200

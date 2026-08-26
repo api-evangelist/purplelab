@@ -1,0 +1,54 @@
+generated: '2026-08-26'
+method: searched
+source: >-
+  https://purplelab.com/sitemap.xml (HTTP 200, 238 URLs reviewed), plus live response-header
+  inspection of https://api.purplelab.com/ (HTTP 200) and https://api.healthnexus.io/ (HTTP 403),
+  2026-08-26.
+note: >-
+  NO PUBLISHED RATE LIMITS. PurpleLab publishes no developer documentation of any kind, so there is
+  no limits page, no quota table, and no documented exhaustion behaviour. Neither live API host
+  returned a rate-limit response header on an anonymous request. limit_count is 0 by measurement.
+
+rate_limits: []
+limit_count: 0
+
+observed_headers:
+- host: api.purplelab.com
+  probe_url: https://api.purplelab.com/
+  http_status: 200
+  content_type: application/json
+  ratelimit_headers_present: false
+  headers_looked_for:
+  - X-RateLimit-Limit
+  - X-RateLimit-Remaining
+  - X-RateLimit-Reset
+  - RateLimit-Limit
+  - RateLimit-Remaining
+  - RateLimit-Reset
+  - RateLimit-Policy
+  - Retry-After
+  finding: >-
+    None present on the anonymous root response. An unauthenticated caller receives no runtime
+    budget signal at all.
+- host: api.healthnexus.io
+  probe_url: https://api.healthnexus.io/
+  http_status: 403
+  content_type: application/json
+  body: '{"message":"Forbidden"}'
+  ratelimit_headers_present: false
+  finding: >-
+    AWS API Gateway rejects every anonymous request before any limit is evaluated, so no limit
+    signal can be observed without credentials. AWS API Gateway conventionally returns HTTP 429 with
+    {"message":"Too Many Requests"} on throttling, but PurpleLab does not document this and it was
+    NOT observed, so it is not recorded as a finding.
+
+exhaustion_behaviour:
+  status_code: null
+  retry_after: null
+  documented: false
+  observed: false
+
+agent_impact: >-
+  An agent integrating HealthNexus cannot plan its call budget from anything public. There is no
+  documented limit, no per-key or per-account scope statement, and no runtime header to back off
+  against - the limit must be discovered by hitting it, or negotiated in the enterprise contract.

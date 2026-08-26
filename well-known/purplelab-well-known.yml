@@ -1,0 +1,231 @@
+generated: '2026-08-26'
+method: probed
+source: >-
+  Anonymous HTTPS probes of /.well-known/* on every PurpleLab-controlled host discovered during
+  contract discovery, 2026-08-26.
+note: >-
+  NO WELL-KNOWN DOCUMENT IS SERVED. Every path returned 404 on the two hosts that answer honestly
+  (purplelab.com, api.purplelab.com). The 200s recorded on healthnexus-sso.purplelab.com,
+  status.purplelab.com and rr.purplelab.com are SPA catch-alls, not documents - each host returns
+  the identical byte-for-byte React shell (1,766 bytes for the HealthNexus SSO app, 57,331 bytes for
+  the Health Nexus Reports app) with content-type text/html for EVERY /.well-known/ path probed,
+  including nonsense ones. They are recorded as misses. api.healthnexus.io is an AWS API Gateway
+  that answers every anonymous path with 403 {"message":"Forbidden"}, so no anonymous document can
+  be read from it either. Per the pipeline contract, NO WellKnown and NO SecurityTxt pointer is
+  emitted in apis.yml, because a recorded absence is not a presence.
+hosts:
+- host: purplelab.com
+  note: Marketing site on HubSpot CMS; 404 body is the standard HubSpot error page.
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: api.purplelab.com
+  note: >-
+    Live first-party JSON API host. Returns structured JSON 404 bodies, so these are genuine
+    per-path 404s rather than a catch-all.
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: api.healthnexus.io
+  note: >-
+    AWS API Gateway fronting the HealthNexus platform. Every anonymous path returns 403
+    {"message":"Forbidden"}; no anonymous well-known document is readable.
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 403
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 403
+    file: null
+  - path: /.well-known/oauth-protected-resource
+    status: 403
+    file: null
+  - path: /.well-known/api-catalog
+    status: 403
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 403
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 403
+    file: null
+  - path: /.well-known/agent.json
+    status: 403
+    file: null
+- host: portal.purplelab.com
+  note: >-
+    HealthNexus customer portal. Every path 307-redirects to
+    https://api.healthnexus.io/healthnexussso/checklogin - the surface is authentication-gated.
+  documents:
+  - path: /.well-known/security.txt
+    status: 307
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 307
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 307
+    file: null
+  - path: /.well-known/oauth-protected-resource
+    status: 307
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 307
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 307
+    file: null
+  - path: /.well-known/agent.json
+    status: 307
+    file: null
+- host: healthnexus-sso.purplelab.com
+  note: >-
+    FALSE POSITIVE - SPA catch-all. All eight paths returned HTTP 200 with content-type text/html
+    and an identical 1,766-byte React shell (<meta name="description" content="HealthNexus SSO">).
+    No document is served; recorded as misses.
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: null
+    document: false
+    reason: SPA shell (text/html, 1766 bytes, identical for every path)
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: null
+    document: false
+    reason: SPA shell (text/html, 1766 bytes, identical for every path)
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: null
+    document: false
+    reason: SPA shell (text/html, 1766 bytes, identical for every path)
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: null
+    document: false
+    reason: SPA shell (text/html, 1766 bytes, identical for every path)
+  - path: /.well-known/api-catalog
+    status: 200
+    file: null
+    document: false
+    reason: SPA shell (text/html, 1766 bytes, identical for every path)
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    file: null
+    document: false
+    reason: SPA shell (text/html, 1766 bytes, identical for every path)
+  - path: /.well-known/agent-card.json
+    status: 200
+    file: null
+    document: false
+    reason: SPA shell (text/html, 1766 bytes, identical for every path)
+  - path: /.well-known/agent.json
+    status: 200
+    file: null
+    document: false
+    reason: SPA shell (text/html, 1766 bytes, identical for every path)
+- host: rr.purplelab.com
+  note: >-
+    FALSE POSITIVE - SPA catch-all. All eight paths returned HTTP 200 with content-type text/html
+    and an identical 57,331-byte "Health Nexus Reports" shell. No document is served.
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: null
+    document: false
+    reason: SPA shell (text/html, 57331 bytes, identical for every path)
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: null
+    document: false
+    reason: SPA shell (text/html, 57331 bytes, identical for every path)
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: null
+    document: false
+    reason: SPA shell (text/html, 57331 bytes, identical for every path)
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: null
+    document: false
+    reason: SPA shell (text/html, 57331 bytes, identical for every path)
+  - path: /.well-known/api-catalog
+    status: 200
+    file: null
+    document: false
+    reason: SPA shell (text/html, 57331 bytes, identical for every path)
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    file: null
+    document: false
+    reason: SPA shell (text/html, 57331 bytes, identical for every path)
+  - path: /.well-known/agent-card.json
+    status: 200
+    file: null
+    document: false
+    reason: SPA shell (text/html, 57331 bytes, identical for every path)
+  - path: /.well-known/agent.json
+    status: 200
+    file: null
+    document: false
+    reason: SPA shell (text/html, 57331 bytes, identical for every path)
+summary:
+  hosts_probed: 6
+  paths_probed: 48
+  documents_served: 0
+  security_txt: false
+  api_catalog: false
+  openid_configuration: false
+  oauth_authorization_server: false
+  agent_card: false
+  ai_plugin: false

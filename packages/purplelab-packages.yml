@@ -1,0 +1,76 @@
+generated: '2026-08-26'
+method: searched
+source: >-
+  Registry searches against registry.npmjs.org (name lookup + full-text search), pypi.org JSON API,
+  and GitHub repository search, plus a review of all 238 URLs in https://purplelab.com/sitemap.xml,
+  2026-08-26.
+note: >-
+  NO FIRST-PARTY CLIENT LIBRARY EXISTS. PurpleLab publishes no SDK on any package registry and links
+  to none from its website. Because package_count is 0, NO `SDKs` pointer is emitted in apis.yml -
+  the sdk_count checks must not be credited to a provider that ships no SDK.
+
+packages: []
+package_count: 0
+
+registries_searched:
+- registry: npm
+  method: name lookup + full-text search
+  queries:
+  - name: purplelab
+    status: 404
+  - name: healthnexus
+    status: 404
+  - name: '@purplelab/sdk'
+    status: 404
+  - name: 'search text=purplelab'
+    status: 200
+    results: 0
+  result: no packages
+- registry: pypi
+  method: JSON metadata endpoint
+  queries:
+  - name: purplelab
+    status: 404
+  - name: healthnexus
+    status: 404
+  - name: purplelab-sdk
+    status: 404
+  result: no packages
+- registry: github
+  method: repository search for "purplelab"
+  status: 200
+  results: 38
+  result: >-
+    No result belongs to PurpleLab Inc. Every hit is name-collision noise - the dominant one is
+    Krook9d/PurpleLab, an unrelated open-source cybersecurity detection lab, plus assorted personal
+    repos and a music label (purplelabelmusic). No GitHub organization named purplelab, PurpleLab,
+    purplelab-inc or purplelabinc could be confirmed as PurpleLab Inc's, and purplelab.com links to
+    no GitHub organization. NO `GitHubOrganization` pointer is emitted.
+- registry: maven-central
+  searched: false
+  reason: >-
+    Not probed. PurpleLab publishes no developer documentation naming a JVM client, and npm/PyPI -
+    the registries a US healthcare-data vendor would ship a client on first - are both empty.
+- registry: nuget
+  searched: false
+  reason: See maven-central.
+- registry: rubygems
+  searched: false
+  reason: See maven-central.
+- registry: crates.io
+  searched: false
+  reason: See maven-central.
+- registry: pkg.go.dev
+  searched: false
+  reason: See maven-central.
+- registry: cdn
+  searched: true
+  result: >-
+    No script-tag, unpkg or jsDelivr distribution is referenced anywhere on purplelab.com. There is
+    no embeddable component or loader library to version, so there is nothing to pin or to report as
+    unpinned.
+
+sdk_links_in_apis_yml: []
+sdk_links_note: >-
+  apis.yml carries no SDK, CLI, or SourceCode link property to derive candidates from, because
+  PurpleLab publishes none.

@@ -1,0 +1,92 @@
+generated: '2026-08-26'
+method: searched
+source: >-
+  https://purplelab.com/sitemap.xml (HTTP 200, 238 URLs reviewed), DNS + HTTPS probes of
+  status.purplelab.com, purplelab.statuspage.io, help.purplelab.com, kb.purplelab.com, and
+  https://purplelab.com/terms-and-conditions-2026-01-29 (HTTP 200), 2026-08-26.
+note: >-
+  PurpleLab publishes no API lifecycle surface: no versioning policy, no deprecation policy or
+  Sunset/Deprecation header commitment, no SLA, no changelog, and no status page. Recorded here as
+  measured absences. NO `StatusPage` and NO `Deprecation` pointer is emitted in apis.yml - the
+  status-page probe below is the reason why, and it is the kind of near-miss that would otherwise be
+  scored as a presence.
+
+versioning:
+  scheme: unknown
+  documented: false
+  evidence:
+    finding: >-
+      No versioning policy published. api.purplelab.com answers /v1 and /v1/openapi.json with 404,
+      so no URL-path version segment could be confirmed either.
+    url: https://api.purplelab.com/v1
+    http_status: 404
+
+deprecation:
+  policy_published: false
+  sunset_header: unknown
+  deprecation_header: unknown
+  rfc8594: false
+  notice_period: null
+  evidence:
+    finding: >-
+      No deprecation or sunset policy anywhere in the 238 published URLs. The terms and conditions
+      govern contract termination, not API deprecation.
+    url: https://purplelab.com/terms-and-conditions-2026-01-29
+    http_status: 200
+
+status_page:
+  present: false
+  url: null
+  evidence:
+  - url: https://status.purplelab.com/
+    http_status: 200
+    finding: >-
+      NOT A STATUS PAGE - this is the decisive negative. status.purplelab.com is an explicitly
+      provisioned host (purplelab.com has no wildcard DNS; random-xyz123.purplelab.com is NXDOMAIN),
+      but it serves the HealthNexus SSO single-page React app, identified by
+      <meta name="description" content="HealthNexus SSO">. Its Statuspage-convention endpoints
+      confirm it - /api/v2/summary.json and /history.rss both 404. A pointer emitted from the 200
+      alone would have credited PurpleLab with a status page it does not operate.
+  - url: https://status.purplelab.com/api/v2/summary.json
+    http_status: 404
+    finding: Statuspage summary API absent.
+  - url: https://purplelab.statuspage.io/
+    http_status: 200
+    finding: >-
+      NOT PurpleLab's. This resolves to Atlassian's own generic Statuspage marketing site (127KB
+      Atlassian "magnolia" page), not a tenant page for PurpleLab. Recorded as a miss.
+
+sla:
+  published: false
+  uptime_target: null
+  evidence:
+    finding: >-
+      No public SLA. The terms and conditions reference service commitments negotiated per contract
+      rather than a published uptime target.
+    url: https://purplelab.com/terms-and-conditions-2026-01-29
+    http_status: 200
+
+changelog:
+  published: false
+  url: null
+  evidence:
+    finding: >-
+      No dated changelog or release-notes surface. The nearest thing PurpleLab publishes is a
+      marketing resources feed at https://purplelab.com/resources (RSS at
+      https://purplelab.com/resources/rss.xml, HTTP 200), which carries press releases, webinars and
+      whitepapers - not API or product release notes. It is wired as `Blog`/`BlogRSS`, NOT as
+      `ChangeLog`, because it is not one.
+    url: https://purplelab.com/resources/rss.xml
+    http_status: 200
+
+deprecated_operations: []
+deprecated_operations_note: >-
+  Cannot be derived - PurpleLab publishes no OpenAPI to read `deprecated: true` from.
+
+terms_versioning_observed:
+  note: >-
+    One genuine lifecycle signal does exist, on the legal side rather than the API side: PurpleLab
+    dates its terms document in the URL itself.
+  url: https://purplelab.com/terms-and-conditions-2026-01-29
+  http_status: 200
+  effective_date: '2026-01-29'

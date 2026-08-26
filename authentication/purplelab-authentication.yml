@@ -1,0 +1,113 @@
+generated: '2026-08-26'
+method: probed
+source: >-
+  Anonymous HTTPS probes of https://portal.purplelab.com/, https://www.healthnexus.io/,
+  https://api.healthnexus.io/ and https://api.purplelab.com/, plus
+  https://healthnexus-sso.purplelab.com/login?domain=portal.purplelab.com, 2026-08-26.
+note: >-
+  POINTER DELIBERATELY WITHHELD. This artifact is written from live probes, not from provider
+  documentation - PurpleLab publishes NO authentication documentation of any kind. The scorer's
+  `authentication_documented` check credits a provider for documenting authentication, so NO
+  `Authentication` pointer is emitted in apis.yml. A later run should not "fix" that omission unless
+  PurpleLab actually publishes an auth page. What follows is our measurement of the deployed auth
+  architecture, and it is labelled as such throughout.
+
+documented_by_provider: false
+docs_url: null
+
+security_schemes: []
+security_schemes_note: >-
+  Cannot be enumerated. No OpenAPI exists to read securitySchemes from, and no OAuth/OIDC discovery
+  document is served anonymously on any host.
+
+observed_architecture:
+  summary: >-
+    HealthNexus is protected by a bespoke first-party SSO service fronted by an AWS API Gateway. The
+    browser flow is: an unauthenticated request to the customer portal is 307-redirected to a
+    checklogin endpoint on the API gateway, which in turn 302-redirects to a React SSO application
+    on a purplelab.com subdomain.
+  flow:
+  - step: 1
+    request: GET https://portal.purplelab.com/
+    http_status: 307
+    location: >-
+      https://api.healthnexus.io/healthnexussso/checklogin?returnUrl=https%3A%2F%2Fportal.purplelab.com%2F
+    finding: >-
+      The customer portal delegates all authentication to api.healthnexus.io. This redirect is also
+      what established healthnexus.io as a PurpleLab-controlled domain.
+  - step: 2
+    request: GET https://api.healthnexus.io/healthnexussso/checklogin
+    http_status: 302
+    location: https://healthnexus-sso.purplelab.com/setup/...
+    finding: >-
+      The gateway hands off to the SSO application. This is the only api.healthnexus.io path found
+      that does NOT return 403 to an anonymous caller.
+  - step: 3
+    request: GET https://healthnexus-sso.purplelab.com/login?domain=portal.purplelab.com
+    http_status: 200
+    content_type: text/html
+    finding: >-
+      A 1,766-byte React single-page application, <meta name="description" content="HealthNexus SSO">.
+      The login UI and any identity-provider configuration are rendered client-side, so no
+      server-side auth metadata is readable.
+  - step: 4
+    request: GET https://www.healthnexus.io/
+    http_status: 307
+    location: https://api.healthnexus.io/healthnexussso/checklogin?returnUrl=...
+    finding: The whole healthnexus.io application is gated by the same flow.
+
+api_host_posture:
+- host: api.healthnexus.io
+  gateway: AWS API Gateway
+  anonymous_response:
+    http_status: 403
+    content_type: application/json
+    body: '{"message":"Forbidden"}'
+  finding: >-
+    Every anonymous path returns 403, including /.well-known/* and every spec path probed. This is
+    the API Gateway default for a missing or invalid authorization header on a known route, and for
+    unknown routes. It is a closed door, not a documented scheme.
+- host: api.purplelab.com
+  gateway: unidentified (WSGI/Flask-style error envelope)
+  anonymous_response:
+    http_status: 200
+    content_type: application/json
+    body: '{}'
+  finding: >-
+    The root answers 200 with an empty JSON object; unknown paths return a bespoke JSON 404 envelope
+    ({"error": "404 Not Found: The requested URL was not found on the server..."}). No
+    WWW-Authenticate challenge is issued, so the auth scheme for this host could not be observed
+    without knowing a real route - and routes are not published.
+
+oauth:
+  discovery_document: false
+  authorization_server_metadata:
+    url: https://api.healthnexus.io/.well-known/oauth-authorization-server
+    http_status: 403
+  protected_resource_metadata:
+    url: https://api.healthnexus.io/.well-known/oauth-protected-resource
+    http_status: 403
+  openid_configuration:
+    url: https://api.purplelab.com/.well-known/openid-configuration
+    http_status: 404
+  conclusion: >-
+    Undetermined. The SSO service name (healthnexussso) and the redirect chain are consistent with
+    either a bespoke session scheme or an OAuth/OIDC implementation without published metadata.
+    Recorded as unknown rather than guessed - see conformance/purplelab-conformance.yml#oauth2.
+
+api_key_scheme:
+  documented: false
+  prefix: null
+  finding: No API-key format, header name, or issuance process is published.
+
+scopes:
+  present: unknown
+  artifact: null
+  finding: >-
+    No scopes/ artifact is written. scopes/ is OAuth-only per the pipeline contract, and no OAuth
+    surface could be confirmed, so an empty scopes file would assert more than was measured.
+
+agent_impact: >-
+  There is no credential an agent can obtain, and no document telling it what to send. Every
+  authenticated surface requires a browser-driven SSO session established after an enterprise
+  contract.

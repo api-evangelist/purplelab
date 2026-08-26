@@ -1,0 +1,56 @@
+generated: '2026-08-26'
+method: searched
+source: >-
+  Web search for a PurpleLab / HealthNexus MCP server, npm and PyPI registry searches, GitHub
+  repository search, review of all 238 URLs in https://purplelab.com/sitemap.xml, and anonymous
+  probes of every PurpleLab-controlled host, 2026-08-26.
+note: >-
+  NO MCP SERVER EXISTS - neither hosted nor local-stdio. NO `MCPServer` pointer is emitted in
+  apis.yml. No candidate tool list is derived either, because PurpleLab publishes no OpenAPI to
+  derive operations from; deriving tools from marketing copy would be fabrication. No endpoint URL
+  is guessed.
+
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: searched
+
+tools: []
+tool_count: 0
+
+evidence:
+- check: hosted remote MCP endpoint
+  finding: >-
+    No mcp.purplelab.com or mcp.healthnexus.io host exists, and no /mcp path is advertised. The only
+    first-party API hosts are api.purplelab.com (live JSON, all probed paths 404) and
+    api.healthnexus.io (AWS API Gateway, 403 on every anonymous path). No MCP endpoint was probed
+    speculatively - a guessed path that happened to answer would be the worst possible artifact here.
+- check: local-stdio package
+  url: https://registry.npmjs.org/-/v1/search?text=purplelab
+  http_status: 200
+  finding: 0 npm results; purplelab, healthnexus and @purplelab/sdk all 404 on npm and PyPI.
+- check: provider documentation
+  url: https://purplelab.com/sitemap.xml
+  http_status: 200
+  finding: >-
+    No MCP, agent, or AI-integration documentation among the 238 published URLs. PurpleLab publishes
+    no developer documentation at all.
+- check: llms.txt tool list fallback
+  url: https://purplelab.com/llms.txt
+  http_status: 404
+  finding: >-
+    No llms.txt is served, so the usual fallback tool list (names + descriptions from a published
+    llms.txt when live introspection is gated) is unavailable.
+- check: OAuth discovery
+  url: https://api.healthnexus.io/.well-known/oauth-authorization-server
+  http_status: 403
+  finding: >-
+    No anonymous OAuth authorization-server or protected-resource metadata on any host, so nothing
+    feeds scopes/ or authentication/ from this route either.
+
+agent_impact: >-
+  PurpleLab has no agent-callable surface. An agent cannot discover, authenticate to, or invoke
+  HealthNexus without a human first completing an enterprise sales cycle and an SSO login.

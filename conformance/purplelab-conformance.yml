@@ -1,0 +1,201 @@
+generated: '2026-08-26'
+method: searched
+source: >-
+  https://purplelab.com/product-privacy-policy (HTTP 200), https://purplelab.com/platform (HTTP 200),
+  https://purplelab.com/terms-and-conditions-2026-01-29 (HTTP 200), fetched 2026-08-26.
+note: >-
+  All entries below are read from PurpleLab's own published pages. NO machine-readable contract
+  exists for PurpleLab (see x-coverage in apis.yml), so the 0.12.0 domain_standard_conformance check
+  - which reads the CONTRACT, not prose - cannot be satisfied here. The healthcare code systems
+  recorded below (NPI, NDC) are named in the product privacy policy as fields present in PurpleLab's
+  data products; they are a data-content signal, not a declared conformance in a spec. Nothing here
+  is inferred from a spec PurpleLab does not publish.
+
+conformance:
+- id: hipaa-de-identification-expert-determination
+  name: HIPAA De-identification - Expert Determination method (45 CFR 164.514(b)(1))
+  conforms: true
+  category: regulatory
+  evidence:
+    url: https://purplelab.com/product-privacy-policy
+    http_status: 200
+    quote: >-
+      "PurpleLab's CLEAR Claims Data has been certified by qualified expert statisticians to meet
+      HIPAA's de-identification standards under the Expert Determination method
+      (45 CFR 164.514(b)(1))."
+    kind: published-claim
+  note: >-
+    This is the strongest compliance assertion PurpleLab publishes and it names a specific
+    regulatory method and citation, certified by named-class third parties (qualified expert
+    statisticians). It is the basis for the apis.yml `Compliance` pointer. PurpleLab does NOT
+    publish the determination report itself, an auditor name, or a validity period.
+
+- id: hipaa-covered-environment
+  name: HIPAA-compliant analytics environment
+  conforms: true
+  category: regulatory
+  evidence:
+    url: https://purplelab.com/platform
+    http_status: 200
+    quote: '"HIPAA-compliant, patient-level environment"'
+    kind: published-claim
+  note: Marketing-page assertion about the HealthNexus environment; no audit artifact published.
+
+- id: ccpa
+  name: California Consumer Privacy Act (CCPA)
+  conforms: true
+  category: regulatory
+  evidence:
+    url: https://purplelab.com/product-privacy-policy
+    http_status: 200
+    quote: >-
+      "Under the California Consumer Privacy Act (\"CCPA\"), we also have to provide you with..."
+    kind: published-policy
+  note: >-
+    PurpleLab operates a OneTrust privacy-choices webform for consumer rights requests
+    (https://purplelab-privacy.my.onetrust.com/webform/...), and a CA Notice at Collection at
+    /product-privacy-policy#ca-notice.
+
+- id: privacy-preserving-tokenization
+  name: Third-party privacy-preserving tokenization (Datavant)
+  conforms: true
+  category: domain-practice
+  evidence:
+    url: https://purplelab.com/platform
+    http_status: 200
+    quote: >-
+      records are "De-identified" and "linkable via Datavant's privacy-preserving tokenization"
+    kind: published-claim
+  note: >-
+    Interoperability practice rather than a certifiable standard. Recorded because Datavant tokens
+    are the de facto linkage key across the US real-world-data market.
+
+- id: npi
+  name: National Provider Identifier (NPI)
+  conforms: true
+  category: domain-identifier
+  evidence:
+    url: https://purplelab.com/product-privacy-policy
+    http_status: 200
+    quote: >-
+      "de-identified medical claims data may contain provider identifiers associated with the
+      medical claim, such as the National Provider Identifier (NPI) Number"
+    kind: published-claim
+  note: >-
+    Data-content signal only. NPI is the CMS provider identifier scheme and is the join key for
+    PurpleLab's provider-data products. NOT evidence of a contract-declared domain standard - no
+    contract is published.
+
+- id: ndc
+  name: National Drug Code (NDC)
+  conforms: true
+  category: domain-identifier
+  evidence:
+    url: https://purplelab.com/product-privacy-policy
+    http_status: 200
+    quote: >-
+      "Prescription claims data such as National Drug Codes (\"NDC\"), date filled, day's supply
+      and quantity"
+    kind: published-claim
+  note: Data-content signal only; same caveat as NPI.
+
+- id: openapi
+  name: OpenAPI
+  conforms: false
+  category: contract
+  evidence:
+    url: https://api.purplelab.com/openapi.json
+    http_status: 404
+    kind: probe
+  note: >-
+    Probed /openapi.json, /openapi.yaml, /swagger.json, /v1/openapi.json, /api-docs, /docs and
+    /redoc on api.purplelab.com (all 404 with structured JSON bodies) and on api.healthnexus.io
+    (all 403). No OpenAPI is published.
+
+- id: graphql
+  name: GraphQL
+  conforms: false
+  category: contract
+  evidence:
+    url: https://api.purplelab.com/graphql
+    http_status: 404
+    kind: probe
+  note: No GraphQL surface found on any PurpleLab-controlled host.
+
+- id: asyncapi
+  name: AsyncAPI
+  conforms: false
+  category: contract
+  evidence:
+    url: https://purplelab.com/sitemap.xml
+    http_status: 200
+    kind: probe
+  note: >-
+    N/A rather than a failure. Despite the "API Streams" product name, PurpleLab's streams are
+    subscription pre-built DATA FEEDS, not an event/pub-sub surface. No webhook or event
+    documentation exists anywhere on the public site (238 sitemap URLs reviewed).
+
+- id: oauth2
+  name: OAuth 2.0
+  conforms: unknown
+  category: security
+  evidence:
+    url: https://api.healthnexus.io/.well-known/oauth-authorization-server
+    http_status: 403
+    kind: probe
+  note: >-
+    Undetermined. HealthNexus uses a bespoke SSO flow (/healthnexussso/checklogin) and no
+    OAuth/OIDC discovery document is served anonymously on any host. Whether the underlying scheme
+    is OAuth 2.0 cannot be established without credentials, so this is recorded as unknown rather
+    than false.
+
+- id: rfc9457
+  name: RFC 9457 Problem Details for HTTP APIs
+  conforms: false
+  category: error-semantics
+  evidence:
+    url: https://api.purplelab.com/openapi.json
+    http_status: 404
+    kind: probe
+  note: >-
+    api.purplelab.com returns a bespoke JSON error envelope - {"error": "404 Not Found: The
+    requested URL was not found on the server..."} with content-type application/json, not
+    application/problem+json. api.healthnexus.io returns {"message":"Forbidden"} (AWS API Gateway
+    default). Neither is RFC 9457.
+
+- id: fhir
+  name: HL7 FHIR
+  conforms: false
+  category: domain-standard
+  evidence:
+    url: https://purplelab.com/sitemap.xml
+    http_status: 200
+    kind: probe
+  note: >-
+    No FHIR claim anywhere on the public site. Reward-only check - PurpleLab is a claims/RWD
+    analytics vendor rather than a clinical-exchange participant, so absence is not a penalty.
+
+- id: x12
+  name: ASC X12 (837/835 healthcare claim and remittance)
+  conforms: unknown
+  category: domain-standard
+  evidence:
+    url: https://purplelab.com/platform
+    http_status: 200
+    kind: probe
+  note: >-
+    PurpleLab's platform page describes ingesting medical and pharmacy claims plus remittance data,
+    which in the US is carried on X12 837/835 transaction sets. PurpleLab never names X12 and
+    publishes no contract, so this is recorded as unknown - a lead to confirm with the provider,
+    not a conformance.
+
+summary:
+  contract_published: false
+  domain_standard_declared_in_contract: false
+  regulatory_claims_published: 3
+  strongest_claim: hipaa-de-identification-expert-determination
+  certifications_published: []
+  certifications_note: >-
+    No SOC 2, ISO 27001, HITRUST, PCI, or FedRAMP attestation is published anywhere on
+    purplelab.com. No trust center exists (trust.purplelab.com and security.purplelab.com are
+    NXDOMAIN).
