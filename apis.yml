@@ -13,6 +13,17 @@ description: >-
   $40M Series B led by Primus Capital with Edison Partners, and acquired KAID Health in 2025. No
   public developer portal, API reference, or machine-readable contract is published; the API and
   platform surfaces sit behind HealthNexus SSO.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://purplelab.com/hubfs/PurpleLab-website/web-app-manifest-512x512.png
 url: https://raw.githubusercontent.com/api-evangelist/purplelab/refs/heads/main/apis.yml
 x-type: company
