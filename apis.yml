@@ -85,6 +85,12 @@ apis:
   - Real-World Data
   - Provider Data
   - Medical Claims
+  - Data Feed
+  tags_raw:
+  - Healthcare
+  - Real-World Data
+  - Provider Data
+  - Medical Claims
   - Data Feeds
   properties:
   - type: Login
